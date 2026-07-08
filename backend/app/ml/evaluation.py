@@ -1,16 +1,15 @@
-# backend/app/ml/evaluation.py
-
 from sklearn.metrics import (
     accuracy_score,
     balanced_accuracy_score,
+    confusion_matrix,
     f1_score,
     precision_recall_fscore_support,
-    confusion_matrix,
 )
-import numpy as np
 
 
 def compute_classification_metrics(y_true, y_pred, class_names):
+    labels = list(range(len(class_names)))
+
     metrics = {
         "accuracy": float(accuracy_score(y_true, y_pred)),
         "balanced_accuracy": float(balanced_accuracy_score(y_true, y_pred)),
@@ -20,7 +19,7 @@ def compute_classification_metrics(y_true, y_pred, class_names):
     precision, recall, f1, support = precision_recall_fscore_support(
         y_true,
         y_pred,
-        labels=list(range(len(class_names))),
+        labels=labels,
         zero_division=0,
     )
 
@@ -34,6 +33,10 @@ def compute_classification_metrics(y_true, y_pred, class_names):
         }
 
     metrics["per_class"] = per_class
-    metrics["confusion_matrix"] = confusion_matrix(y_true, y_pred).tolist()
+    metrics["confusion_matrix"] = confusion_matrix(
+        y_true,
+        y_pred,
+        labels=labels,
+    ).tolist()
 
     return metrics

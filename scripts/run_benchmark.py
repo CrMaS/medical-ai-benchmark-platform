@@ -1,34 +1,47 @@
-# scripts/run_benchmark.py
-
+import argparse
 import json
-import random
-from pathlib import Path
 
-from backend.app.ml.evaluation import compute_classification_metrics
+from backend.app.services.benchmark_service import run_random_baseline
+from backend.app.services.run_store import save_run
 
 
-CLASS_NAMES = ["akiec", "bcc", "bkl", "df", "mel", "nv", "vasc"]
+def parse_args():
+    parser = argparse.ArgumentParser(
+        description="Run a demo skin-lesion benchmark."
+    )
+    parser.add_argument(
+        "--num-samples",
+        type=int,
+        default=200,
+        help="Number of synthetic samples to evaluate.",
+    )
+    parser.add_argument(
+        "--seed",
+        type=int,
+        default=42,
+        help="Random seed for reproducibility.",
+    )
+    parser.add_argument(
+        "--save",
+        action="store_true",
+        help="Save the run to the runs directory.",
+    )
+    return parser.parse_args()
 
 
 def main():
-    n = 200
-    y_true = [random.randint(0, len(CLASS_NAMES) - 1) for _ in range(n)]
-    y_pred = [random.randint(0, len(CLASS_NAMES) - 1) for _ in range(n)]
+    args = parse_args()
 
-    metrics = compute_classification_metrics(y_true, y_pred, CLASS_NAMES)
+    run = run_random_baseline(
+        num_samples=args.num_samples,
+        seed=args.seed,
+    )
 
-    result = {
-        "model": "random-baseline",
-        "dataset": "ham10000-sample",
-        "num_samples": n,
-        "metrics": metrics,
-    }
+    if args.save:
+        output_path = save_run(run)
+        print(f"Saved benchmark run to {output_path}")
 
-    Path("runs").mkdir(exist_ok=True)
-    with open("runs/random_baseline.json", "w") as f:
-        json.dump(result, f, indent=2)
-
-    print(json.dumps(result, indent=2))
+    print(json.dumps(run, indent=2))
 
 
 if __name__ == "__main__":
