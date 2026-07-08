@@ -1,0 +1,11 @@
+# docker-compose.yml
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./runs:/app/runs
