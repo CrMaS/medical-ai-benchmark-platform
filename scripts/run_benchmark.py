@@ -6,9 +6,7 @@ from backend.app.services.run_store import save_run
 
 
 def parse_args():
-    parser = argparse.ArgumentParser(
-        description="Run a demo skin-lesion benchmark."
-    )
+    parser = argparse.ArgumentParser(description="Run a demo skin-lesion benchmark.")
     parser.add_argument(
         "--num-samples",
         type=int,
