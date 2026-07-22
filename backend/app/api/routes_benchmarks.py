@@ -8,7 +8,7 @@ router = APIRouter(prefix="/benchmarks", tags=["benchmarks"])
 
 
 @router.post("/random-baseline")
-def create_random_baseline_benchmark(request: RandomBenchmarkRequest):
+async def create_random_baseline_benchmark(request: RandomBenchmarkRequest):
     run = run_random_baseline(
         num_samples=request.num_samples,
         seed=request.seed,

@@ -6,12 +6,12 @@ router = APIRouter(prefix="/runs", tags=["runs"])
 
 
 @router.get("")
-def get_runs():
+async def get_runs():
     return list_runs()
 
 
 @router.get("/{run_id}")
-def get_single_run(run_id: str):
+async def get_single_run(run_id: str):
     run = get_run(run_id)
 
     if run is None:

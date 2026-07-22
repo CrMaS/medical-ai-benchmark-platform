@@ -14,6 +14,9 @@ def _make_run_id() -> str:
 
 
 def run_random_baseline(num_samples: int = 200, seed: int = 42) -> dict:
+    if not 10 <= num_samples <= 10_000:
+        raise ValueError("num_samples must be between 10 and 10000")
+
     rng = random.Random(seed)
     num_classes = len(CLASS_NAMES)
 
@@ -40,8 +43,8 @@ def run_random_baseline(num_samples: int = 200, seed: int = 42) -> dict:
         "seed": seed,
         "class_names": CLASS_NAMES,
         "label_distribution": {
-            CLASS_NAMES[class_idx]: count
-            for class_idx, count in sorted(label_distribution.items())
+            class_name: label_distribution[class_idx]
+            for class_idx, class_name in enumerate(CLASS_NAMES)
         },
         "metrics": metrics,
     }

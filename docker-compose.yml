@@ -9,3 +9,6 @@ services:
       - "8000:8000"
     volumes:
       - ./runs:/app/runs
+      - ./models:/app/models:ro
+    environment:
+      MEDICAL_AI_MODEL_PATH: /app/models/skin_lesion_classifier.pt2

@@ -6,5 +6,5 @@ router = APIRouter(prefix="/datasets", tags=["datasets"])
 
 
 @router.get("")
-def get_datasets():
+async def get_datasets():
     return DATASETS
